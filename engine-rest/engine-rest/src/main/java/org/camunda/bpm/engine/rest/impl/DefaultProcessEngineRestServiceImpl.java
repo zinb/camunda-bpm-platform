@@ -14,7 +14,10 @@ package org.camunda.bpm.engine.rest.impl;
 
 import java.net.URI;
 
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.engine.rest.AuthorizationRestService;
 import org.camunda.bpm.engine.rest.BatchRestService;
@@ -41,7 +44,11 @@ import org.camunda.bpm.engine.rest.TaskRestService;
 import org.camunda.bpm.engine.rest.TenantRestService;
 import org.camunda.bpm.engine.rest.UserRestService;
 import org.camunda.bpm.engine.rest.VariableInstanceRestService;
+import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
 import org.camunda.bpm.engine.rest.history.HistoryRestService;
+import org.camunda.bpm.engine.rest.sub.identity.GroupMembersResource;
+import org.camunda.bpm.engine.rest.sub.identity.TenantGroupMembersResource;
+import org.camunda.bpm.engine.rest.sub.identity.TenantUserMembersResource;
 
 @Path(DefaultProcessEngineRestServiceImpl.PATH)
 public class DefaultProcessEngineRestServiceImpl extends AbstractProcessEngineRestServiceImpl {
@@ -93,19 +100,71 @@ public class DefaultProcessEngineRestServiceImpl extends AbstractProcessEngineRe
     return super.getJobRestService(null);
   }
 
-  @Path(GroupRestService.PATH)
-  public GroupRestService getGroupRestService() {
-    return super.getGroupRestService(null);
-  }
+//  @Path(GroupRestService.PATH)
+//  public GroupRestService getGroupRestService() {
+//    return super.getGroupRestService(null);
+//  }
+//
+//  @OPTIONS
+//  @Path(GroupRestService.PATH)
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupRestService(@Context UriInfo context) {
+//    return super.getGroupRestService(null).availableOperations(context);
+//  }
+//
+//  @OPTIONS
+//  @Path(GroupRestService.PATH + "/{id}")
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupResource(@PathParam("id") String id,
+//                                                                @Context UriInfo context) {
+//    return super.getGroupRestService(null).getGroup(id).availableOperations(context);
+//  }
+//
+//  @OPTIONS
+//  @Path(GroupRestService.PATH + "/{id}" + GroupMembersResource.PATH)
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupMemberResource(@PathParam("id") String id,
+//                                                                      @Context UriInfo context) {
+//    return super.getGroupRestService(null).getGroup(id).getGroupMembersResource().availableOperations(context);
+//  }
 
   @Path(UserRestService.PATH)
   public UserRestService getUserRestService() {
     return super.getUserRestService(null);
   }
 
+  @OPTIONS
+  @Path(UserRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForUserRestService(@Context UriInfo context) {
+    return super.getUserRestService(null).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(UserRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForUserResource(@PathParam("id") String id, @Context UriInfo context) {
+    return super.getUserRestService(null).getUser(id).availableOperations(context);
+  }
+
   @Path(AuthorizationRestService.PATH)
   public AuthorizationRestService getAuthorizationRestService() {
     return super.getAuthorizationRestService(null);
+  }
+
+  @OPTIONS
+  @Path(AuthorizationRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForAuthorizationRestService(@Context UriInfo context) {
+    return super.getAuthorizationRestService(null).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(AuthorizationRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForAuthorizationResource(@PathParam("id") String id,
+                                                                        @Context UriInfo context) {
+    return super.getAuthorizationRestService(null).getAuthorization(id).availableOperations(context);
   }
 
   @Path(IncidentRestService.PATH)
@@ -143,6 +202,21 @@ public class DefaultProcessEngineRestServiceImpl extends AbstractProcessEngineRe
     return super.getFilterRestService(null);
   }
 
+  @OPTIONS
+  @Path(FilterRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForFilterRestService(@Context UriInfo context) {
+    return super.getFilterRestService(null).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(FilterRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForFilterResource(@PathParam("id") String filterId,
+                                                                 @Context UriInfo context) {
+    return super.getFilterRestService(null).getFilter(filterId).availableOperations(context);
+  }
+
   @Path(MetricsRestService.PATH)
   public MetricsRestService getMetricsRestService() {
     return super.getMetricsRestService(null);
@@ -176,6 +250,37 @@ public class DefaultProcessEngineRestServiceImpl extends AbstractProcessEngineRe
   @Path(TenantRestService.PATH)
   public TenantRestService getTenantRestService() {
     return super.getTenantRestService(null);
+  }
+
+  @OPTIONS
+  @Path(TenantRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantRestService(@Context UriInfo context) {
+    return super.getTenantRestService(null).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(TenantRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantResource(@PathParam("id") String id,
+                                                                 @Context UriInfo context) {
+    return super.getTenantRestService(null).getTenant(id).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(TenantRestService.PATH + "/{id}" + TenantUserMembersResource.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantUserMembersResource(@PathParam("id") String id,
+                                                                            @Context UriInfo context) {
+    return super.getTenantRestService(null).getTenant(id).getTenantUserMembersResource().availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path(TenantRestService.PATH + "/{id}" + TenantGroupMembersResource.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantGroupMembersResource(@PathParam("id") String id,
+                                                                             @Context UriInfo context) {
+    return super.getTenantRestService(null).getTenant(id).getTenantGroupMembersResource().availableOperations(context);
   }
 
   @Override

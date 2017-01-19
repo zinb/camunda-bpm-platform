@@ -27,7 +27,7 @@ import org.camunda.bpm.engine.impl.identity.Authentication;
 public abstract class AbstractAuthorizedRestResource extends AbstractRestProcessEngineAware {
 
   protected final Resource resource;
-  protected final String resourceId;
+  protected String resourceId;
 
   public AbstractAuthorizedRestResource(String processEngineName, Resource resource, String resourceId, ObjectMapper objectMapper) {
     super(processEngineName, objectMapper);

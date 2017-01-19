@@ -635,8 +635,7 @@
           <version>2.0.1</version>
           <scope>provided</scope>
         </dependency>
-        
-        <dependency>
+             <dependency>
           <groupId>org.apache.cxf</groupId>
           <artifactId>cxf-rt-frontend-jaxrs</artifactId>
           <version>${version.cxf}</version>
@@ -650,6 +649,13 @@
           <version>${version.cxf}</version>
           <scope>test</scope>
         </dependency>
+        <!--         <dependency>
+          <groupId>com.ibm.jaxrs2</groupId>
+          <artifactId>thinlcient</artifactId>
+          <version>9.0</version>
+          <systemPath>/home/zell/com.ibm.jaxrs2.0.thinclient_9.0.jar</systemPath>
+          <scope>system</scope>
+        </dependency> -->
       </dependencies>
 
      <build>

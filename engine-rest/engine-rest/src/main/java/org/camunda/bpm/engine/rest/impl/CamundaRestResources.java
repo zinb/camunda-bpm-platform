@@ -20,6 +20,8 @@ import org.camunda.bpm.engine.rest.exception.RestExceptionHandler;
 import org.camunda.bpm.engine.rest.hal.JacksonHalJsonProvider;
 import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.camunda.bpm.engine.rest.mapper.MultipartPayloadProvider;
+import org.camunda.bpm.engine.rest.sub.identity.impl.GroupMembersResourceImpl;
+import org.camunda.bpm.engine.rest.sub.identity.impl.GroupResourceImpl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,8 +39,11 @@ public class CamundaRestResources {
   private static final Set<Class<?>> CONFIGURATION_CLASSES = new HashSet<Class<?>>();
 
   static {
-    RESOURCE_CLASSES.add(NamedProcessEngineRestServiceImpl.class);
-    RESOURCE_CLASSES.add(DefaultProcessEngineRestServiceImpl.class);
+//    RESOURCE_CLASSES.add(NamedProcessEngineRestServiceImpl.class);
+//    RESOURCE_CLASSES.add(DefaultProcessEngineRestServiceImpl.class);
+    RESOURCE_CLASSES.add(GroupRestServiceImpl.class);
+//    RESOURCE_CLASSES.add(GroupResourceImpl.class);
+    RESOURCE_CLASSES.add(GroupMembersResourceImpl.class);
 
     CONFIGURATION_CLASSES.add(JacksonConfigurator.class);
     CONFIGURATION_CLASSES.add(JacksonJsonProvider.class);

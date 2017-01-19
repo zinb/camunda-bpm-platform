@@ -18,19 +18,36 @@ import org.camunda.bpm.engine.rest.GroupRestService;
 import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
 import org.camunda.bpm.engine.rest.sub.identity.GroupMembersResource;
 import org.camunda.bpm.engine.rest.util.PathUtil;
+import org.camunda.bpm.engine.rest.util.ProvidersUtil;
 
 import javax.ws.rs.HttpMethod;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.Providers;
 import java.net.URI;
 
+import static org.camunda.bpm.engine.authorization.Authorization.ANY;
 import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
 import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
+import static org.camunda.bpm.engine.authorization.Resources.GROUP;
 
 /**
  * @author Daniel Meyer
  *
  */
 public class GroupMembersResourceImpl extends AbstractIdentityResource implements GroupMembersResource {
+
+  @PathParam("id")
+  public String id;
+
+  @Context
+  Providers providers;
+
+  public GroupMembersResourceImpl() {
+    super(null , GROUP, ANY, null);
+  }
 
   public GroupMembersResourceImpl(String processEngineName, String resourceId, String rootResourcePath, ObjectMapper objectMapper) {
     super(processEngineName, Resources.GROUP_MEMBERSHIP, resourceId, objectMapper);
@@ -52,7 +69,6 @@ public class GroupMembersResourceImpl extends AbstractIdentityResource implement
   }
 
   public ResourceOptionsDto availableOperations(UriInfo context) {
-
     ResourceOptionsDto dto = new ResourceOptionsDto();
 
     URI uri = context.getBaseUriBuilder()

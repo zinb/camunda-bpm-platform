@@ -34,6 +34,7 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import com.jayway.restassured.response.Response;
 import org.camunda.bpm.engine.AuthorizationException;
 import org.camunda.bpm.engine.AuthorizationService;
 import org.camunda.bpm.engine.IdentityService;
@@ -567,7 +568,7 @@ public class AuthorizationRestServiceInteractionTest extends AbstractRestService
 
     when(processEngineConfigurationMock.isAuthorizationEnabled()).thenReturn(true);
 
-    given()
+    Response resp = given()
       .then()
         .statusCode(Status.OK.getStatusCode())
 

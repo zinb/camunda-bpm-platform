@@ -48,8 +48,6 @@ public interface FilterRestService {
   @Produces(MediaType.APPLICATION_JSON)
   FilterDto createFilter(FilterDto filterDto);
 
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
   ResourceOptionsDto availableOperations(@Context UriInfo context);
 
 }

@@ -27,13 +27,30 @@ import java.util.List;
  * @author Daniel Meyer
  *
  */
-@Produces(MediaType.APPLICATION_JSON)
+@Path("/{engineName : (engine/[^/]+/)?}group")
 public interface GroupRestService {
 
-  public static final String PATH = "/group";
+  String PATH = "/group";
 
-  @Path("/{id}")
-  GroupResource getGroup(@PathParam("id") String id);
+  @GET
+  @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  GroupDto getGroup(@PathParam("id") String id, @Context UriInfo context);
+
+  @DELETE
+  @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  void deleteGroup(@PathParam("id") String id);
+
+  @PUT
+  @Path("{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  void updateGroup(@PathParam("id") String id, GroupDto Group);
+
+  @OPTIONS
+  @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  ResourceOptionsDto availableOperationsForGroupResource(@PathParam("id") String id, @Context UriInfo context);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)

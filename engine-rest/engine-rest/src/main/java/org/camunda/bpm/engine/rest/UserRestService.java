@@ -31,7 +31,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface UserRestService {
 
-  public static final String PATH = "/user";
+  String PATH = "/user";
 
   @Path("/{id}")
   UserResource getUser(@PathParam("id") String id);
@@ -51,7 +51,5 @@ public interface UserRestService {
   @Consumes
   void createUser(UserDto userDto);
 
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
   ResourceOptionsDto availableOperations(@Context UriInfo context);
 }

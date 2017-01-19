@@ -7,6 +7,8 @@
   </appender>
   
   <logger name="org.camunda" level="debug" />
+  <logger name="org.apache.cxf.jaxrs.utils" level="debug" />
+  <logger name="com.ibm" level="debug" />
   
   <root level="info">
     <appender-ref ref="STDOUT" />

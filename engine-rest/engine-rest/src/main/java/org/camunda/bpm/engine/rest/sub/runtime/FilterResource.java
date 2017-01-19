@@ -74,8 +74,6 @@ public interface FilterResource {
   @Consumes(MediaType.APPLICATION_JSON)
   CountResultDto queryCount(String extendingQuery);
 
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
   ResourceOptionsDto availableOperations(@Context UriInfo context);
 
 

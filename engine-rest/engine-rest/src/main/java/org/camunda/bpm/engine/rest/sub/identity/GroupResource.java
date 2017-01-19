@@ -24,25 +24,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Daniel Meyer
  *
  */
+
 public interface GroupResource {
-
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public GroupDto getGroup(@Context UriInfo context);
-
-  @DELETE
-  @Produces(MediaType.APPLICATION_JSON)
-  public void deleteGroup();
-
-  @PUT
-  @Consumes(MediaType.APPLICATION_JSON)
-  public void updateGroup(GroupDto Group);
-  
-  @Path(GroupMembersResource.PATH)
-  GroupMembersResource getGroupMembersResource();
-  
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
-  ResourceOptionsDto availableOperations(@Context UriInfo context);
 
 }

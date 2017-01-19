@@ -30,14 +30,12 @@ public interface TenantGroupMembersResource {
 
   @PUT
   @Path("/{groupId}")
-  public void createMembership(@PathParam("groupId") String groupId);
+  void createMembership(@PathParam("groupId") String groupId);
 
   @DELETE
   @Path("/{groupId}")
-  public void deleteMembership(@PathParam("groupId") String groupId);
+  void deleteMembership(@PathParam("groupId") String groupId);
 
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
   ResourceOptionsDto availableOperations(@Context UriInfo context);
 
 }

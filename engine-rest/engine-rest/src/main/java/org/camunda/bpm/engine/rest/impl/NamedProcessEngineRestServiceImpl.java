@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.engine.rest.AuthorizationRestService;
 import org.camunda.bpm.engine.rest.BatchRestService;
@@ -53,9 +52,13 @@ import org.camunda.bpm.engine.rest.TenantRestService;
 import org.camunda.bpm.engine.rest.UserRestService;
 import org.camunda.bpm.engine.rest.VariableInstanceRestService;
 import org.camunda.bpm.engine.rest.dto.ProcessEngineDto;
+import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
 import org.camunda.bpm.engine.rest.exception.RestException;
 import org.camunda.bpm.engine.rest.history.HistoryRestService;
 import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
+import org.camunda.bpm.engine.rest.sub.authorization.AuthorizationResource;
+import org.camunda.bpm.engine.rest.sub.identity.*;
+import org.camunda.bpm.engine.rest.sub.runtime.FilterResource;
 
 @Path(NamedProcessEngineRestServiceImpl.PATH)
 public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRestServiceImpl {
@@ -115,12 +118,37 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
   public JobRestService getJobRestService(@PathParam("name") String engineName) {
     return super.getJobRestService(engineName);
   }
-
-  @Override
-  @Path("/{name}" + GroupRestService.PATH)
-  public GroupRestService getGroupRestService(@PathParam("name") String engineName) {
-    return super.getGroupRestService(engineName);
-  }
+//
+//  @Override
+//  @Path("/{name}" + GroupRestService.PATH)
+//  public GroupRestService getGroupRestService(@PathParam("name") String engineName) {
+//    return super.getGroupRestService(engineName);
+//  }
+//
+//  @OPTIONS
+//  @Path("/{name}" + GroupRestService.PATH)
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupRestService(@PathParam("name") String engineName, @Context UriInfo context) {
+//    return super.getGroupRestService(engineName).availableOperations(context);
+//  }
+//
+//  @OPTIONS
+//  @Path("/{name}" + GroupRestService.PATH + "/{id}")
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupResource(@PathParam("name") String engineName,
+//                                                                   @PathParam("id") String id,
+//                                                                   @Context UriInfo context) {
+//    return super.getGroupRestService(engineName).getGroup(id).availableOperations(context);
+//  }
+//
+//  @OPTIONS
+//  @Path("/{name}" + GroupRestService.PATH + "/{id}" + GroupMembersResource.PATH)
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public ResourceOptionsDto availableOperationsForGroupMemberResource(@PathParam("name") String engineName,
+//                                                                @PathParam("id") String id,
+//                                                                @Context UriInfo context) {
+//    return super.getGroupRestService(engineName).getGroup(id).getGroupMembersResource().availableOperations(context);
+//  }
 
   @Override
   @Path("/{name}" + UserRestService.PATH)
@@ -128,10 +156,40 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
     return super.getUserRestService(engineName);
   }
 
+  @OPTIONS
+  @Path("/{name}" + UserRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForUserRestService(@PathParam("name") String engineName, @Context UriInfo context) {
+    return super.getUserRestService(engineName).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + UserRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForUserResource(@PathParam("name") String engineName, @PathParam("id") String id, @Context UriInfo context) {
+    return super.getUserRestService(engineName).getUser(id).availableOperations(context);
+  }
+
   @Override
   @Path("/{name}" + AuthorizationRestService.PATH)
   public AuthorizationRestService getAuthorizationRestService(@PathParam("name") String engineName) {
     return super.getAuthorizationRestService(engineName);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + AuthorizationRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForAuthorizationRestService(@PathParam("name") String engineName, @Context UriInfo context) {
+    return super.getAuthorizationRestService(engineName).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + AuthorizationRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForAuthorizationResource(@PathParam("name") String engineName,
+                                                                           @PathParam("id") String id,
+                                                                           @Context UriInfo context) {
+    return super.getAuthorizationRestService(engineName).getAuthorization(id).availableOperations(context);
   }
 
   @Override
@@ -176,6 +234,22 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
     return super.getFilterRestService(engineName);
   }
 
+  @OPTIONS
+  @Path("/{name}" + FilterRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForFilterRestService(@PathParam("name") String engineName, @Context UriInfo context) {
+    return super.getFilterRestService(engineName).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + FilterRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForFilterResource(@PathParam("name") String engineName,
+                                                                 @PathParam("id") String filterId,
+                                                                 @Context UriInfo context) {
+    return super.getFilterRestService(engineName).getFilter(filterId).availableOperations(context);
+  }
+
   @Override
   @Path("/{name}" + MetricsRestService.PATH)
   public MetricsRestService getMetricsRestService(@PathParam("name") String engineName) {
@@ -216,6 +290,40 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
   @Path("/{name}" + TenantRestService.PATH)
   public TenantRestService getTenantRestService(@PathParam("name") String engineName) {
     return super.getTenantRestService(engineName);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + TenantRestService.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantRestService(@PathParam("name") String engineName, @Context UriInfo context) {
+    return super.getTenantRestService(engineName).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + TenantRestService.PATH + "/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantResource(@PathParam("name") String engineName,
+                                                                 @PathParam("id") String id,
+                                                                 @Context UriInfo context) {
+    return super.getTenantRestService(engineName).getTenant(id).availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + TenantRestService.PATH + "/{id}" + TenantUserMembersResource.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantUserMembersResource(@PathParam("name") String engineName,
+                                                                 @PathParam("id") String id,
+                                                                 @Context UriInfo context) {
+    return super.getTenantRestService(engineName).getTenant(id).getTenantUserMembersResource().availableOperations(context);
+  }
+
+  @OPTIONS
+  @Path("/{name}" + TenantRestService.PATH + "/{id}" + TenantGroupMembersResource.PATH)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ResourceOptionsDto availableOperationsForTenantGroupMembersResource(@PathParam("name") String engineName,
+                                                                 @PathParam("id") String id,
+                                                                 @Context UriInfo context) {
+    return super.getTenantRestService(engineName).getTenant(id).getTenantGroupMembersResource().availableOperations(context);
   }
 
   @GET

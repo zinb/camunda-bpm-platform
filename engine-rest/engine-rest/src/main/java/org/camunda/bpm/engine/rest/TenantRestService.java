@@ -54,8 +54,6 @@ public interface TenantRestService {
   @Consumes(MediaType.APPLICATION_JSON)
   void createTenant(TenantDto tenant);
 
-  @OPTIONS
-  @Produces(MediaType.APPLICATION_JSON)
   ResourceOptionsDto availableOperations(@Context UriInfo context);
 
 }
