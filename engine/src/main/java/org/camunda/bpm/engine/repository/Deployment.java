@@ -34,7 +34,6 @@ import java.util.List;
  *
  * @author Tom Baeyens
  * @author Joram Barrez
- * @author Christopher Zell
  */
 public interface Deployment {
 
@@ -45,34 +44,6 @@ public interface Deployment {
   Date getDeploymentTime();
 
   String getSource();
-
-  /**
-   * Returns the process definitions, which are deployed with that deployment.
-   *
-   * @return the process definitions which are deployed
-   */
-  List<ProcessDefinition> getDeployedProcessDefinitions();
-
-  /**
-   * Returns the case definitions, which are deployed with that deployment.
-   *
-   * @return the case definitions, which are deployed
-   */
-  List<CaseDefinition> getDeployedCaseDefinitions();
-
-  /**
-   * Returns the decision definitions, which are deployed with that deployment
-   *
-   * @return the decision definitions, which are deployed
-   */
-  List<DecisionDefinition> getDeployedDecisionDefinitions();
-
-  /**
-   * Returns the decision requirements definitions, which are deployed with that deployment
-   *
-   * @return the decision definitions, which are deployed
-   */
-  List<DecisionRequirementsDefinition> getDeployedDecisionRequirementsDefinitions();
 
   /**
    * Returns the id of the tenant this deployment belongs to. Can be <code>null</code>
