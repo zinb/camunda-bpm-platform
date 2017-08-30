@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             id="definitions_de01c030-8ac4-4930-b0b9-1f0cff3d862c"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <process camunda:historyTimeToLive="1" id="process" isExecutable="true">
+    <startEvent id="startEvent" />
+
+    <sequenceFlow sourceRef="startEvent" targetRef="serviceTask1" />
+    <serviceTask id="serviceTask1"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask1" targetRef="serviceTask2" />
+    <serviceTask id="serviceTask2"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask2" targetRef="serviceTask3" />
+    <serviceTask id="serviceTask3"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask3" targetRef="serviceTask4" />
+    <serviceTask id="serviceTask4"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask4" targetRef="serviceTask5" />
+    <serviceTask id="serviceTask5"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask5" targetRef="serviceTask6" />
+    <serviceTask id="serviceTask6"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask6" targetRef="serviceTask7" />
+    <serviceTask id="serviceTask7"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask7" targetRef="serviceTask8" />
+    <serviceTask id="serviceTask8"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask8" targetRef="serviceTask9" />
+    <serviceTask id="serviceTask9"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask9" targetRef="serviceTask10" />
+    <serviceTask id="serviceTask10"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask10" targetRef="serviceTask11" />
+    <serviceTask id="serviceTask11"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask11" targetRef="serviceTask12" />
+    <serviceTask id="serviceTask12"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask12" targetRef="serviceTask13" />
+    <serviceTask id="serviceTask13"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask13" targetRef="serviceTask14" />
+    <serviceTask id="serviceTask14"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask14" targetRef="serviceTask15" />
+    <serviceTask id="serviceTask15"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask15" targetRef="serviceTask16" />
+    <serviceTask id="serviceTask16"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask16" targetRef="serviceTask17" />
+    <serviceTask id="serviceTask17"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask17" targetRef="serviceTask18" />
+    <serviceTask id="serviceTask18"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask18" targetRef="serviceTask19" />
+    <serviceTask id="serviceTask19"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask19" targetRef="serviceTask20" />
+    <serviceTask id="serviceTask20"
+                 camunda:asyncBefore="true"
+                 camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate" />
+
+    <sequenceFlow sourceRef="serviceTask20" targetRef="endEvent" />
+    <endEvent id="endEvent" />
+  </process>
+</definitions>
