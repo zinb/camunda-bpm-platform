@@ -273,10 +273,16 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.21.0</version>
         <configuration>
           <failIfNoTests>false</failIfNoTests>
           <trimStackTrace>false</trimStackTrace>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <forkCount>4</forkCount>
+          <reuseForks>true</reuseForks>
+          <systemPropertyVariables>
+              <jdbcUrl>jdbc:h2:mem:camunda_${surefire.forkNumber};DB_CLOSE_DELAY=1000;MVCC=true;LOCK_TIMEOUT=10000;MV_STORE=false</jdbcUrl>
+          </systemPropertyVariables>
           <includes>
            <include>%regex[.*(${test.includes}).*Test.*.class]</include>
           </includes>
