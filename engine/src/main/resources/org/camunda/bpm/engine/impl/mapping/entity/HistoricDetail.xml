@@ -388,6 +388,7 @@
 
   <select id="selectHistoricVariableUpdatePage" resultMap="historicVariableUpdateResultMap" parameterType="java.util.Map" >
     <bind name="maxResults" value="parameter.maxResults" />
+    ${optimizeLimitBeforeWithoutOffset}
     select ${limitBeforeWithoutOffset} * from ${prefix}ACT_HI_DETAIL RES
     <where>
       <if test="parameter.occurredAfter != null">
@@ -401,7 +402,7 @@
     </where>
 
     ORDER BY RES.TIME_ ASC
-    ${limitAfterWithoutOffset}
+    ${optimizeLimitAfterWithoutOffset}
   </select>
 
 </mapper>

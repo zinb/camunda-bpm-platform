@@ -259,6 +259,7 @@
 
   <select id="selectCompletedHistoricActivityPage" resultMap="historicActivityInstanceResultMap" parameterType="java.util.Map" >
     <bind name="maxResults" value="parameter.maxResults" />
+    ${optimizeLimitBeforeWithoutOffset}
     select ${limitBeforeWithoutOffset} * from ${prefix}ACT_HI_ACTINST RES
 
     <where>
@@ -274,7 +275,7 @@
     </where>
 
     ORDER BY RES.END_TIME_ ASC
-    ${limitAfterWithoutOffset}
+    ${optimizeLimitAfterWithoutOffset}
   </select>
 
 </mapper>

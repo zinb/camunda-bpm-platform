@@ -589,6 +589,7 @@
 
     select RES.*
     from (
+      ${optimizeLimitBeforeWithoutOffset}
       SELECT ${limitBeforeWithoutOffset} SELF.*, DEF.NAME_, DEF.VERSION_
       FROM ${prefix}ACT_HI_PROCINST SELF
 
@@ -608,7 +609,7 @@
       </where>
 
       ORDER BY SELF.END_TIME_ ASC
-      ${limitAfterWithoutOffset}
+      ${optimizeLimitAfterWithoutOffset}
     ) RES
 
   </select>
@@ -617,6 +618,7 @@
     <bind name="maxResults" value="parameter.maxResults" />
     select RES.*
     from (
+      ${optimizeLimitBeforeWithoutOffset}
       SELECT ${limitBeforeWithoutOffset} SELF.*, DEF.NAME_, DEF.VERSION_
       FROM ${prefix}ACT_HI_PROCINST SELF
 
@@ -634,7 +636,7 @@
       </where>
 
       ORDER BY SELF.START_TIME_ ASC
-      ${limitAfterWithoutOffset}
+      ${optimizeLimitAfterWithoutOffset}
 
     ) RES
 
