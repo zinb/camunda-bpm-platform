@@ -228,13 +228,13 @@ public class GetCompletedHistoricActivityInstancesForOptimizeTest {
       .startEvent("startEvent")
       .scriptTask("Script1")
         .scriptFormat("groovy")
-        .scriptText("sleep(3);")
+        .scriptText("sleep(1000);")
       .scriptTask("Script2")
         .scriptFormat("groovy")
-        .scriptText("sleep(3);")
+        .scriptText("sleep(1000);")
       .scriptTask("Script3")
         .scriptFormat("groovy")
-        .scriptText("sleep(3);")
+        .scriptText("sleep(1000);")
       .endEvent("endEvent")
       .done();
     testHelper.deploy(simpleDefinition);
@@ -246,6 +246,9 @@ public class GetCompletedHistoricActivityInstancesForOptimizeTest {
 
     // then
     assertThat(completedHistoricActivityInstances.size(), is(3));
+    System.out.println("First event: " + completedHistoricActivityInstances.get(0).getActivityId());
+    System.out.println("Second event: " + completedHistoricActivityInstances.get(1).getActivityId());
+    System.out.println("Third event: " + completedHistoricActivityInstances.get(2).getActivityId());
     assertThat(completedHistoricActivityInstances.get(0).getActivityId(), is("startEvent"));
     assertThat(completedHistoricActivityInstances.get(1).getActivityId(), is("Script1"));
     assertThat(completedHistoricActivityInstances.get(2).getActivityId(), is("Script2"));
