@@ -228,13 +228,13 @@ public class GetCompletedHistoricActivityInstancesForOptimizeTest {
       .startEvent("startEvent")
       .scriptTask("Script1")
         .scriptFormat("groovy")
-        .scriptText("sleep(1);")
+        .scriptText("sleep(3);")
       .scriptTask("Script2")
         .scriptFormat("groovy")
-        .scriptText("sleep(1);")
+        .scriptText("sleep(3);")
       .scriptTask("Script3")
         .scriptFormat("groovy")
-        .scriptText("sleep(1);")
+        .scriptText("sleep(3);")
       .endEvent("endEvent")
       .done();
     testHelper.deploy(simpleDefinition);
