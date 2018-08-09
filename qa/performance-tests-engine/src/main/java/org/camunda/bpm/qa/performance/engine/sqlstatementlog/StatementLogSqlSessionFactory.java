@@ -17,7 +17,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.camunda.bpm.qa.performance.engine.util.DelegatingSqlSessionFactory;
 
 /**
- * {@link DelegatingSqlSessionFactory} wrapping the created sessions using a {@link StatementLogSqlSession.
+ * {@link DelegatingSqlSessionFactory} wrapping the created sessions using a {@link StatementLogSqlSession}.
  *
  * @author Daniel Meyer
  *
