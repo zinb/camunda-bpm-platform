@@ -1,5 +1,6 @@
 package org.camunda.bpm.qa.performance.engine.historycleanup;
 
+import org.camunda.bpm.engine.impl.ManagementServiceImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.metrics.Meter;
@@ -71,11 +72,15 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
     cleanupDays.add(Calendar.DATE, levels + 1);
     ClockUtil.setCurrentTime(cleanupDays.getTime());
 
+    // set instances-to-be-deleted number
+    int iterations = Integer.parseInt(properties.getProperty("loadGenerator.numberOfIterations", "10000"));
+    this.expectedDeletedInstances = iterations * levels;
+
     // set Hierarchical History Cleanup flag
     boolean hierarchicalHistoryCleanup = Boolean.parseBoolean(properties.getProperty("hierarchicalHistoryCleanup", "true"));
     engineConfiguration.setHierarchicalHistoryCleanup(hierarchicalHistoryCleanup);
 
-    int degreeOfParallelism = Integer.parseInt(properties.getProperty("degreeOfParallelism", "3"));
+    int degreeOfParallelism = Integer.parseInt(properties.getProperty("degreeOfParallelism", "1"));
     engineConfiguration.setHistoryCleanupDegreeOfParallelism(degreeOfParallelism);
 
     // enable metrics
@@ -90,8 +95,6 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
     columnNames.add(THROUGHPUT);
     this.resultSet.setResultColumnNames(columnNames);
 
-    // set instances-to-be-deleted number
-    this.expectedDeletedInstances = historyService.createHistoricProcessInstanceQuery().count();
   }
 
   @After
@@ -119,15 +122,16 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
       .execute();
     FileUtil.writeStringToFile(report, htmlReportFilename);
 
-    clearMetrics();
+    clearDatabase();
   }
 
-  protected void clearMetrics() {
+  protected void clearDatabase() {
     Collection<Meter> meters = engineConfiguration.getMetricsRegistry().getMeters().values();
     for (Meter meter : meters) {
       meter.getAndClear();
     }
-    engine.getManagementService().deleteMetrics(null);
+//    engine.getManagementService().deleteMetrics(null);
+    ((ManagementServiceImpl)engine.getManagementService()).purge();
   }
 
   @Test

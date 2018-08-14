@@ -477,7 +477,7 @@
       <properties>
         <numberOfThreads>1</numberOfThreads>
         <numberOfRuns>1</numberOfRuns>
-        <degreeOfParallelism>3</degreeOfParallelism>
+        <degreeOfParallelism>1</degreeOfParallelism>
         <testWatchers />
         <watchActivities />
         <processEnginePlugins />
