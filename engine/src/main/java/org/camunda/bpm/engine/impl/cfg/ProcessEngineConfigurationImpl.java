@@ -313,6 +313,8 @@ import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.camunda.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.camunda.bpm.engine.impl.telemetry.CommandProbe;
+import org.camunda.bpm.engine.impl.telemetry.TelemetryManager;
 import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.ParseUtil;
 import org.camunda.bpm.engine.impl.util.ReflectUtil;
@@ -755,6 +757,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected String failedJobRetryTimeCycle;
 
+  protected TelemetryManager telemetryManager;
+
   // login attempts ///////////////////////////////////////////////////////
   protected int loginMaxAttempts = 10;
   protected int loginDelayFactor = 2;
@@ -775,6 +779,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected void init() {
     invokePreInit();
+    initTelemetry();
     initDefaultCharset();
     initHistoryLevel();
     initHistoryEventProducer();
@@ -1200,6 +1205,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected static Properties databaseTypeMappings = getDefaultDatabaseTypeMappings();
   protected static final String MY_SQL_PRODUCT_NAME = "MySQL";
   protected static final String MARIA_DB_PRODUCT_NAME = "MariaDB";
+
+  private Thread telemetryManagerThread;
 
   protected static Properties getDefaultDatabaseTypeMappings() {
     Properties databaseTypeMappings = new Properties();
@@ -2294,6 +2301,19 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       adminGroups.add(Groups.CAMUNDA_ADMIN);
     }
   }
+
+  private void initTelemetry() {
+    telemetryManager = new TelemetryManager();
+    telemetryManagerThread = new Thread(telemetryManager);
+    telemetryManagerThread.start();
+
+    if (customPreCommandInterceptorsTxRequired == null) {
+      customPreCommandInterceptorsTxRequired = new ArrayList<CommandInterceptor>();
+    }
+
+    customPreCommandInterceptorsTxRequired.add(new CommandProbe(telemetryManager));
+  }
+
 
   // getters and setters //////////////////////////////////////////////////////
 
@@ -3598,6 +3618,14 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
       // ACT-233: connection pool of Ibatis is not properely initialized if this is not called!
       ((PooledDataSource) dataSource).forceCloseAll();
+    }
+
+    telemetryManager.shutdown(telemetryManagerThread);
+
+    try {
+      telemetryManagerThread.join(5000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
   }
 
