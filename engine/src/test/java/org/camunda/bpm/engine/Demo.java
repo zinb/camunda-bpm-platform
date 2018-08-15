@@ -28,7 +28,7 @@ public class Demo {
 
     runtimeService.startProcessInstanceByKey("testProcess");
     runtimeService.startProcessInstanceByKey("testProcess");
-    runtimeService.startProcessInstanceByKey("testProcess");
+    runtimeService.startProcessInstanceByKey("foo");
     runtimeService.startProcessInstanceByKey("testProcess");
 
     System.out.println("foo");

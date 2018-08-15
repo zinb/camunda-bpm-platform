@@ -1,5 +1,8 @@
 package org.camunda.bpm.engine.impl.telemetry;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
@@ -27,8 +30,25 @@ public class CommandProbe extends CommandInterceptor {
       e.printStackTrace();
     }
 
+    try {
+      return next.execute(command);
+    }
+    catch (RuntimeException e) {
+      try {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
 
-    return next.execute(command);
+        CommandErrorProbeEvent event = new CommandErrorProbeEvent();
+        event.setStacktrace(sw.toString());
+
+        telemetryManager.reportEvent(event);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      throw e;
+    }
   }
 
 }

@@ -22,6 +22,7 @@ public class TelemetryManager implements Runnable {
 
   private Map<String, Long> commandCounts = new HashMap<String, Long>();
   private Map<String, String> environmentEvents = new HashMap<String, String>();
+  private Map<String, Long> distinctErrorLog = new HashMap<String, Long>();
 
   public void reportEvent(ProbeEvent event) {
     events.offer(event);
@@ -58,10 +59,28 @@ public class TelemetryManager implements Runnable {
     case ENVIRONMENT:
       onEnvironmentEvent((EnvironmentProbeEvent) event);
       break;
+    case COMMAND_FAILED:
+      onCommandFailed((CommandErrorProbeEvent) event);
+      break;
 
     default:
       break;
     }
+  }
+
+  private void onCommandFailed(CommandErrorProbeEvent event) {
+    String stacktrace = event.getStacktrace();
+
+    Long value = distinctErrorLog.get(stacktrace);
+
+    if (value == null) {
+      value = 0L;
+    }
+
+    value++;
+
+    distinctErrorLog.put(stacktrace, value);
+
   }
 
   private void onEnvironmentEvent(EnvironmentProbeEvent event) {
@@ -80,7 +99,6 @@ public class TelemetryManager implements Runnable {
     value++;
 
     commandCounts.put(commandName, value);
-
   }
 
   public void shutdown(Thread thread) {
@@ -113,6 +131,16 @@ public class TelemetryManager implements Runnable {
       telemetryRequest.getEvents().add(environmentEvent);
       environmentEvents.clear();
     }
+
+    // error log
+    if (!distinctErrorLog.isEmpty()) {
+      TelemetryEvent environmentEvent = new TelemetryEvent();
+      environmentEvent.setType("DistinctErrorLog");
+      environmentEvent.setPayload(new HashMap<String, Object>(distinctErrorLog));
+      telemetryRequest.getEvents().add(environmentEvent);
+      distinctErrorLog.clear();
+    }
+
 
     if (!telemetryRequest.getEvents().isEmpty()) {
       try {
