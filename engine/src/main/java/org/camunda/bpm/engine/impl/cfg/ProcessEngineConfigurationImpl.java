@@ -314,6 +314,7 @@ import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory
 import org.camunda.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.camunda.bpm.engine.impl.scripting.env.ScriptingEnvironment;
 import org.camunda.bpm.engine.impl.telemetry.CommandProbe;
+import org.camunda.bpm.engine.impl.telemetry.StartupProbe;
 import org.camunda.bpm.engine.impl.telemetry.TelemetryManager;
 import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.ParseUtil;
@@ -2312,6 +2313,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
 
     customPreCommandInterceptorsTxRequired.add(new CommandProbe(telemetryManager));
+
+    new StartupProbe(telemetryManager)
+      .onStartup();
   }
 
 
