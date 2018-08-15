@@ -4,6 +4,7 @@ public enum ProbeEventType {
 
   COMMAND_INVOKED,
   COMMAND_FAILED,
-  ENVIRONMENT;
+  ENVIRONMENT,
+  DEPLOYMENT;
 
 }

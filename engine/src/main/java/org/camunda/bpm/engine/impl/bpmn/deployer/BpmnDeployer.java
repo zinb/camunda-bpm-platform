@@ -51,6 +51,7 @@ import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionManager;
 import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.LegacyBehavior;
+import org.camunda.bpm.engine.impl.telemetry.DeploymentProbe;
 import org.camunda.bpm.engine.management.JobDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.IdentityLinkType;
@@ -75,6 +76,8 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
 
   protected ExpressionManager expressionManager;
   protected BpmnParser bpmnParser;
+
+  private DeploymentProbe deploymentProbe;
 
   /** <!> DON'T KEEP DEPLOYMENT-SPECIFIC STATE <!> **/
 
@@ -104,6 +107,8 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
       properties.set(JOB_DECLARATIONS_PROPERTY, new HashMap<String, List<JobDeclaration<?, ?>>>());
     }
     properties.get(JOB_DECLARATIONS_PROPERTY).putAll(bpmnParse.getJobDeclarations());
+
+    deploymentProbe.onBpmnProcessDeployed(bytes);
 
     return bpmnParse.getProcessDefinitions();
   }
@@ -472,4 +477,7 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
     this.bpmnParser = bpmnParser;
   }
 
+  public void setDeploymentProbe(DeploymentProbe deploymentProbe) {
+    this.deploymentProbe = deploymentProbe;
+  }
 }

@@ -314,6 +314,7 @@ import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory
 import org.camunda.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.camunda.bpm.engine.impl.scripting.env.ScriptingEnvironment;
 import org.camunda.bpm.engine.impl.telemetry.CommandProbe;
+import org.camunda.bpm.engine.impl.telemetry.DeploymentProbe;
 import org.camunda.bpm.engine.impl.telemetry.StartupProbe;
 import org.camunda.bpm.engine.impl.telemetry.TelemetryManager;
 import org.camunda.bpm.engine.impl.util.IoUtil;
@@ -1676,6 +1677,10 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
 
     bpmnDeployer.setBpmnParser(bpmnParser);
+
+    DeploymentProbe deploymentProbe = new DeploymentProbe(telemetryManager);
+
+    bpmnDeployer.setDeploymentProbe(deploymentProbe);
 
     return bpmnDeployer;
   }

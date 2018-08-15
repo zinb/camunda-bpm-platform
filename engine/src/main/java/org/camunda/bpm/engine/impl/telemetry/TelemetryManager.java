@@ -1,16 +1,21 @@
 package org.camunda.bpm.engine.impl.telemetry;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.camunda.bpm.engine.impl.util.json.JSONObject;
+import org.camunda.bpm.model.bpmn.Bpmn;
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class TelemetryManager implements Runnable {
 
@@ -23,6 +28,7 @@ public class TelemetryManager implements Runnable {
   private Map<String, Long> commandCounts = new HashMap<String, Long>();
   private Map<String, String> environmentEvents = new HashMap<String, String>();
   private Map<String, Long> distinctErrorLog = new HashMap<String, Long>();
+  private Map<String, Long> bpmnSymbolCounts = new HashMap<String, Long>();
 
   public void reportEvent(ProbeEvent event) {
     events.offer(event);
@@ -62,9 +68,32 @@ public class TelemetryManager implements Runnable {
     case COMMAND_FAILED:
       onCommandFailed((CommandErrorProbeEvent) event);
       break;
+    case DEPLOYMENT:
+      onDeploymentEvent((DeploymentProbeEvent) event);
+      break;
 
     default:
       break;
+    }
+  }
+
+  private void onDeploymentEvent(DeploymentProbeEvent event) {
+    BpmnModelInstance instance = Bpmn.readModelFromStream(new ByteArrayInputStream(event.getResource()));
+
+    Collection<FlowNode> flowNodes = instance.getModelElementsByType(FlowNode.class);
+
+    for (FlowNode flowNode : flowNodes) {
+      String type = flowNode.getElementType().getTypeName();
+
+      Long value = bpmnSymbolCounts.get(type);
+
+      if (value == null) {
+        value = 0L;
+      }
+
+      value++;
+
+      bpmnSymbolCounts.put(type, value);
     }
   }
 
@@ -141,6 +170,14 @@ public class TelemetryManager implements Runnable {
       distinctErrorLog.clear();
     }
 
+    // error log
+    if (!bpmnSymbolCounts.isEmpty()) {
+      TelemetryEvent environmentEvent = new TelemetryEvent();
+      environmentEvent.setType("BpmnSymbolCount");
+      environmentEvent.setPayload(new HashMap<String, Object>(bpmnSymbolCounts));
+      telemetryRequest.getEvents().add(environmentEvent);
+      bpmnSymbolCounts.clear();
+    }
 
     if (!telemetryRequest.getEvents().isEmpty()) {
       try {
