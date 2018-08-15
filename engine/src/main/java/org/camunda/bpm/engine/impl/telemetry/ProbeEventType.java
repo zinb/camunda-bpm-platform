@@ -1,6 +1,6 @@
 package org.camunda.bpm.engine.impl.telemetry;
 
-public enum TelemetryEventType {
+public enum ProbeEventType {
 
   COMMAND_INVOKED;
 

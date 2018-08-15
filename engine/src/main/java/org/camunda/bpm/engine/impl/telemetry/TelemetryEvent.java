@@ -1,28 +1,26 @@
 package org.camunda.bpm.engine.impl.telemetry;
 
+import java.util.Map;
+
 public class TelemetryEvent {
 
-  private TelemetryEventType type;
+  private String type;
 
-  private long timestamp;
+  private Map<String, Object> payload;
 
-  public TelemetryEvent(TelemetryEventType type) {
+  public void setType(String type) {
     this.type = type;
   }
 
-  public void setType(TelemetryEventType type) {
-    this.type = type;
+  public void setPayload(Map<String, Object> payload) {
+    this.payload = payload;
   }
 
-  public void setTimestamp(long timestamp) {
-    this.timestamp = timestamp;
+  public Map<String, Object> getPayload() {
+    return payload;
   }
 
-  public long getTimestamp() {
-    return timestamp;
-  }
-
-  public TelemetryEventType getType() {
+  public String getType() {
     return type;
   }
 }

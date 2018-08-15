@@ -1,9 +1,9 @@
 package org.camunda.bpm.engine.impl.telemetry;
 
-public class CommandInvokedTelemetryEvent extends TelemetryEvent {
+public class CommandInvokedProbeEvent extends ProbeEvent {
 
-  public CommandInvokedTelemetryEvent() {
-    super(TelemetryEventType.COMMAND_INVOKED);
+  public CommandInvokedProbeEvent() {
+    super(ProbeEventType.COMMAND_INVOKED);
   }
 
   private String commandName;

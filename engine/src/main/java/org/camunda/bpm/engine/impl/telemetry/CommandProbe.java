@@ -16,7 +16,7 @@ public class CommandProbe extends CommandInterceptor {
   public <T> T execute(Command<T> command) {
 
     try {
-      CommandInvokedTelemetryEvent commandInvokedTelemetryEvent = new CommandInvokedTelemetryEvent();
+      CommandInvokedProbeEvent commandInvokedTelemetryEvent = new CommandInvokedProbeEvent();
 
       commandInvokedTelemetryEvent.setCommandName(command.getClass().getName());
       commandInvokedTelemetryEvent.setTimestamp(ClockUtil.getCurrentTime().getTime());
