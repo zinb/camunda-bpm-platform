@@ -21,13 +21,15 @@ public class TelemetryManager implements Runnable {
 
   private long lastTransmit;
 
+  private long counter = 0;
+
   private ArrayBlockingQueue<ProbeEvent> events = new ArrayBlockingQueue<ProbeEvent>(1024);
 
   private volatile boolean active = true;
 
   private Map<String, Long> commandCounts = new HashMap<String, Long>();
   private Map<String, String> environmentEvents = new HashMap<String, String>();
-  private Map<String, Long> distinctErrorLog = new HashMap<String, Long>();
+  private Map<String, Long> errorLog = new HashMap<String, Long>();
   private Map<String, Long> bpmnSymbolCounts = new HashMap<String, Long>();
 
   public void reportEvent(ProbeEvent event) {
@@ -98,9 +100,9 @@ public class TelemetryManager implements Runnable {
   }
 
   private void onCommandFailed(CommandErrorProbeEvent event) {
-    String stacktrace = event.getStacktrace();
+    String stacktrace = event.getExceptionClass();
 
-    Long value = distinctErrorLog.get(stacktrace);
+    Long value = errorLog.get(stacktrace);
 
     if (value == null) {
       value = 0L;
@@ -108,8 +110,7 @@ public class TelemetryManager implements Runnable {
 
     value++;
 
-    distinctErrorLog.put(stacktrace, value);
-
+    errorLog.put(stacktrace, value);
   }
 
   private void onEnvironmentEvent(EnvironmentProbeEvent event) {
@@ -136,7 +137,8 @@ public class TelemetryManager implements Runnable {
   }
 
   private boolean shouldTransmit() {
-    return true;
+    counter++;
+    return counter % 2 == 0;
   }
 
   private void transmit() {
@@ -162,15 +164,15 @@ public class TelemetryManager implements Runnable {
     }
 
     // error log
-    if (!distinctErrorLog.isEmpty()) {
+    if (!errorLog.isEmpty()) {
       TelemetryEvent environmentEvent = new TelemetryEvent();
-      environmentEvent.setType("DistinctErrorLog");
-      environmentEvent.setPayload(new HashMap<String, Object>(distinctErrorLog));
+      environmentEvent.setType("ExceptionLog");
+      environmentEvent.setPayload(new HashMap<String, Object>(errorLog));
       telemetryRequest.getEvents().add(environmentEvent);
-      distinctErrorLog.clear();
+      errorLog.clear();
     }
 
-    // error log
+    // symbol log
     if (!bpmnSymbolCounts.isEmpty()) {
       TelemetryEvent environmentEvent = new TelemetryEvent();
       environmentEvent.setType("BpmnSymbolCount");

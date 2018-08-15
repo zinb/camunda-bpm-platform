@@ -27,11 +27,8 @@ public class Demo {
       .deploy();
 
     runtimeService.startProcessInstanceByKey("testProcess");
-    runtimeService.startProcessInstanceByKey("testProcess");
-//    runtimeService.startProcessInstanceByKey("foo");
-    runtimeService.startProcessInstanceByKey("testProcess");
 
-    System.out.println("foo");
+    processEngine.getTaskService().createTaskQuery().list();
 
     processEngine.close();
 

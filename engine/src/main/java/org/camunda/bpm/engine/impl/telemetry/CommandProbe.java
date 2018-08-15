@@ -41,6 +41,7 @@ public class CommandProbe extends CommandInterceptor {
 
         CommandErrorProbeEvent event = new CommandErrorProbeEvent();
         event.setStacktrace(sw.toString());
+        event.setExceptionClass(e.getClass().getCanonicalName());
 
         telemetryManager.reportEvent(event);
       }

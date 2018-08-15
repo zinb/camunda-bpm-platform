@@ -7,6 +7,7 @@ public class CommandErrorProbeEvent extends ProbeEvent {
   }
 
   private String stacktrace;
+  private String exceptionClass;
 
   public void setStacktrace(String stacktrace) {
     this.stacktrace = stacktrace;
@@ -14,6 +15,14 @@ public class CommandErrorProbeEvent extends ProbeEvent {
 
   public String getStacktrace() {
     return stacktrace;
+  }
+
+  public String getExceptionClass() {
+    return exceptionClass;
+  }
+
+  public void setExceptionClass(String exceptionClass) {
+    this.exceptionClass = exceptionClass;
   }
 
 }
