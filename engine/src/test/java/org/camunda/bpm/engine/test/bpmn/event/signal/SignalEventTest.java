@@ -527,8 +527,7 @@ public class SignalEventTest {
    */
   @Deployment
   @Test
-  @Ignore
-  public void FAILING_testNoContinuationWhenSignalInterruptsThrowingActivity() {
+  public void testNoContinuationWhenSignalInterruptsThrowingActivity() {
 
     // given a process instance
     runtimeService.startProcessInstanceByKey("signalEventSubProcess");

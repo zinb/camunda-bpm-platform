@@ -474,6 +474,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
       PvmExecutionImpl replacingExecution = this.createExecution();
       replacingExecution.setConcurrent(true);
       replacingExecution.setScope(false);
+      // TODO when the process has subprocess with event subprocess
+      // this 
       replacingExecution.replace(this);
       this.inactivate();
       this.setActivity(null);
