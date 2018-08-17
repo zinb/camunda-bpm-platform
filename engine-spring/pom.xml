@@ -63,7 +63,7 @@
     </dependency>
     <dependency>
       <groupId>javax.persistence</groupId>
-      <artifactId>persistence-api</artifactId>
+      <artifactId>javax.persistence-api</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -113,6 +113,21 @@
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-core</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
