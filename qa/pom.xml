@@ -134,6 +134,7 @@
     <profile>
       <id>tomcat</id>
       <modules>
+        <module>tomcat-managed-7</module>
         <module>tomcat-runtime</module>
       </modules>
     </profile>

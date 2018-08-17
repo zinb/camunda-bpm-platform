@@ -1,5 +1,7 @@
 <Context antiResourceLocking="true">
 
+   <JarScanner scanManifest="false"/>
+
    <Resource name="BeanManager" 
       auth="Container"
       type="javax.enterprise.inject.spi.BeanManager"
