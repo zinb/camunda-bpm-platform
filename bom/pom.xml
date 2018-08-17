@@ -40,7 +40,6 @@
     <version.camunda.spin>1.6.0-SNAPSHOT</version.camunda.spin>
     <version.camunda.template-engines>1.0.1</version.camunda.template-engines>
     <version.camunda.ee.xslt-plugin>1.0.2</version.camunda.ee.xslt-plugin>
-    <version.jaxb>2.2.11</version.jaxb>
   </properties>
 
   <dependencyManagement>
@@ -205,21 +204,6 @@
         <groupId>org.camunda.bpm.extension.xslt</groupId>
         <artifactId>camunda-bpm-xslt</artifactId>
         <version>${version.camunda.ee.xslt-plugin}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>${version.jaxb}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${version.jaxb}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>${version.jaxb}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
