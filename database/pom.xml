@@ -287,10 +287,13 @@
     </profile>
     <profile>
       <id>oracle-10</id>
+      <properties>
+        <version.oracle>${version.oracle-10}</version.oracle>
+      </properties>
       <dependencies>
         <dependency>
           <groupId>com.oracle.jdbc</groupId>
-          <artifactId>ojdbc14</artifactId>
+          <artifactId>ojdbc6</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
