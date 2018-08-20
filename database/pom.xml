@@ -52,11 +52,6 @@
         <version>${version.oracle}</version>
       </dependency>
       <dependency>
-        <groupId>com.oracle.jdbc</groupId>
-        <artifactId>ojdbc14</artifactId>
-        <version>${version.oracle-10}</version>
-      </dependency>
-      <dependency>
         <groupId>org.mariadb.jdbc</groupId>
         <artifactId>mariadb-java-client</artifactId>
         <version>${version.mariadb}</version>
@@ -110,11 +105,6 @@
               <groupId>com.oracle.jdbc</groupId>
               <artifactId>ojdbc6</artifactId>
               <version>${version.oracle}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.oracle.jdbc</groupId>
-              <artifactId>ojdbc14</artifactId>
-              <version>${version.oracle-10}</version>
             </dependency>
             <dependency>
               <groupId>com.ibm.db2.jcc</groupId>
