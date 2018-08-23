@@ -15,10 +15,11 @@ package org.camunda.bpm.qa.performance.engine.historycleanup;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Process;
+import org.camunda.bpm.model.bpmn.builder.StartEventBuilder;
 import org.camunda.bpm.qa.performance.engine.junit.PerfTestProcessEngine;
 import org.camunda.bpm.qa.performance.engine.loadgenerator.LoadGenerator;
 import org.camunda.bpm.qa.performance.engine.loadgenerator.LoadGeneratorConfiguration;
+import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.DeployFileTask;
 import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.DeployModelInstancesTask;
 import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.StartProcessInstanceTask;
 
@@ -33,6 +34,8 @@ import java.util.Properties;
  */
 public class HistoryLoadGenerator {
 
+  private static final String MULTI_LEVEL_DRG_DMN = "org/camunda/bpm/qa/performance/engine/historycleanup/drdMultiLevelDish.dmn11.xml";
+
   public static void main(String[] args) throws InterruptedException {
 
     final Properties properties = PerfTestProcessEngine.loadProperties();
@@ -46,35 +49,49 @@ public class HistoryLoadGenerator {
     // generate & deploy models
     int levels = Integer.parseInt(properties.getProperty("loadGenerator.processInstanceLevels", "5"));
     final List<BpmnModelInstance> modelInstances = getHierarchicalProcessesList(levels);
+    String dmnModelInstancePath = getClasspathResourcePath(MULTI_LEVEL_DRG_DMN);
+
     Runnable[] setupTasks = new Runnable[] {
-        new DeployModelInstancesTask(processEngine, modelInstances)
+        new DeployModelInstancesTask(processEngine, modelInstances),
+        new DeployFileTask(processEngine, dmnModelInstancePath)
     };
     config.setSetupTasks(setupTasks);
 
     // set worker task for starting process instances
-    final Runnable[] workerRunnables = new Runnable[1];
-    String processDefKey = modelInstances
-      .get(modelInstances.size() - 1)
-      .getModelElementsByType(Process.class)
-      .iterator()
-      .next()
-      .getId();
-    workerRunnables[0] = new StartProcessInstanceTask(processEngine, processDefKey);
+    String processDefKey = "nestedProcess" + levels;
+    final Runnable[] workerRunnables = {new StartProcessInstanceTask(processEngine, processDefKey)};
     config.setWorkerTasks(workerRunnables);
 
     // generate load
     new LoadGenerator(config).execute();
-    System.out.println(processEngine.getHistoryService().createHistoricProcessInstanceQuery().count()+ " Process Instances in DB");
+
+    long hpiCount = processEngine.getHistoryService().createHistoricProcessInstanceQuery().count();
+    long hdiCount = processEngine.getHistoryService().createHistoricDecisionInstanceQuery().count();
+    long totalCount = hpiCount + hdiCount;
+    System.out.printf("%d Historic Instances in DB: %d Historic Process Instances, %d Historic Decision Instances\n", totalCount, hpiCount, hdiCount);
   }
 
   static List<BpmnModelInstance> getHierarchicalProcessesList(int levels) {
     List<BpmnModelInstance> descendantModelInstances = new ArrayList<BpmnModelInstance>(levels);
-    if (levels <= 1) {
-      descendantModelInstances.add(Bpmn.createExecutableProcess("nestedProcess" + levels)
+    if (levels - 2 <= 1) {
+
+      StartEventBuilder modelInstanceBuilder = Bpmn.createExecutableProcess("nestedProcess" + levels)
         .camundaHistoryTimeToLive(levels)
-        .startEvent()
-        .endEvent()
-        .done());
+        .startEvent();
+
+      BpmnModelInstance lastModelInstance = (levels < 3)
+        ? modelInstanceBuilder
+          .endEvent()
+          .done()
+        : modelInstanceBuilder
+          .businessRuleTask("dish-decision")
+            .camundaDecisionRef("dish-decision")
+            .camundaResultVariable("result")
+          .endEvent()
+          .done();
+
+      descendantModelInstances.add(lastModelInstance);
+
       return descendantModelInstances;
     }
 
@@ -89,6 +106,11 @@ public class HistoryLoadGenerator {
       .done());
 
     return descendantModelInstances;
+  }
+
+  protected static String getClasspathResourcePath(String relativePath) {
+    Class clazz = HistoryLoadGenerator.class;
+    return clazz.getClassLoader().getResource(relativePath).getPath();
   }
 
 }

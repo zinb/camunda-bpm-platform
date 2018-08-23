@@ -46,7 +46,7 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
   public static final String DESCRIPTION = "Description";
   public static final String DELETED_INSTANCES = "Deleted Instances";
   public static final String ELAPSED_TIME = "Elapsed time (sec)";
-  public static final String THROUGHPUT = "Throughput (Deleted Instances/sec)";
+  public static final String THROUGHPUT = "Average Throughput (Deleted Instances/sec)";
 
   // cleanup check interval
   public static final double INTERVAL = 1000.0;
@@ -130,7 +130,7 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
     for (Meter meter : meters) {
       meter.getAndClear();
     }
-//    engine.getManagementService().deleteMetrics(null);
+
     ((ManagementServiceImpl)engine.getManagementService()).purge();
   }
 
@@ -147,11 +147,19 @@ public class HistoryCleanupPerformanceTest extends ProcessEngineJobExecutorPerfo
 
       Thread.sleep((long)INTERVAL);
 
-      totalDeletions = engine.getManagementService()
+      long totalHpiDeletions = engine.getManagementService()
         .createMetricsQuery()
         .name(Metrics.HISTORY_CLEANUP_REMOVED_PROCESS_INSTANCES)
         .startDate(startTime)
         .sum();
+
+      long totalHdiDeletions = engine.getManagementService()
+        .createMetricsQuery()
+        .name(Metrics.HISTORY_CLEANUP_REMOVED_DECISION_INSTANCES)
+        .startDate(startTime)
+        .sum();
+
+      totalDeletions = totalHpiDeletions + totalHdiDeletions;
 
       long intervalDeletions = totalDeletions - previousDeletions;
       previousDeletions = totalDeletions;
