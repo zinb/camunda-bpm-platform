@@ -44,7 +44,7 @@ public class EscalationEventSubprocessTest extends PluggableProcessEngineTestCas
 
   /** CAM-9220 (https://app.camunda.com/jira/browse/CAM-9220) */
   @Deployment
-  public void IGNORE_FAILING_testThrowEscalationEventFromEventSubprocess() {
+  public void testThrowEscalationEventFromEventSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("embeddedEventSubprocess");
 
     Job job = managementService.createJobQuery().singleResult();
@@ -59,8 +59,8 @@ public class EscalationEventSubprocessTest extends PluggableProcessEngineTestCas
 
     // second timer job shouldn't be available
     job = managementService.createJobQuery().singleResult();
-    managementService.executeJob(job.getId());
     assertNull(job);
+//    managementService.executeJob(job.getId());
 
     // there should only be one completed Escalation Catch Boundary Event
     assertEquals(1, historyService.createHistoricActivityInstanceQuery()
