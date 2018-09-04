@@ -388,7 +388,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTestCase {
     assertEquals("BoundaryEventTask", taskService.createTaskQuery().singleResult().getName());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/error/ErrorEndEventIssue_v2.bpmn20.xml"})
+  @Deployment
   public void testThrownAnErrorInEventSubprocessInSubprocessDifferentTransaction() {
     runtimeService.startProcessInstanceByKey("eventSubProcess");
 
@@ -415,7 +415,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTestCase {
     assertNull(job1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/error/ErrorEndEventIssue.bpmn20.xml"})
+  @Deployment
   public void testThrownAnErrorInEventSubprocessInSubprocess() {
     runtimeService.startProcessInstanceByKey("eventSubProcess");
 

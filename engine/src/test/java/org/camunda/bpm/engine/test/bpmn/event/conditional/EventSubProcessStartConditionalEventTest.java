@@ -24,7 +24,6 @@ import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;

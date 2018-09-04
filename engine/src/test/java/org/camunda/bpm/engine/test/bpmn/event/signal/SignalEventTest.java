@@ -612,4 +612,27 @@ public class SignalEventTest {
     assertEquals(1, taskService.createTaskQuery().count());
   }
 
+  @Test
+  @Deployment
+  public void testThrownSignalInEventSubprocessInSubprocess() {
+    runtimeService.startProcessInstanceByKey("embeddedEventSubprocess");
+
+    Task task1 = taskService.createTaskQuery().singleResult();
+    assertNotNull(task1);
+    assertEquals("task in subprocess", task1.getName());
+
+    Job job = managementService.createJobQuery().singleResult();
+    assertNotNull(job);
+
+    //when job is executed task is created
+    managementService.executeJob(job.getId());
+
+    Task task3 = taskService.createTaskQuery().singleResult();
+    assertNotNull(task3);
+    assertEquals("after catch", task3.getName());
+
+    Job job1 = managementService.createJobQuery().singleResult();
+    assertNull(job1);
+  }
+
 }

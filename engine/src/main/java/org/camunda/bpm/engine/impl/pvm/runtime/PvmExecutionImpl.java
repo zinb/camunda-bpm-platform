@@ -474,8 +474,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
       PvmExecutionImpl replacingExecution = this.createExecution();
       replacingExecution.setConcurrent(true);
       replacingExecution.setScope(false);
-      // TODO when the process has subprocess with event subprocess
-      // this 
       replacingExecution.replace(this);
       this.inactivate();
       this.setActivity(null);
@@ -690,7 +688,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
     // activity instance id handling
     this.activityInstanceId = execution.getActivityInstanceId();
     this.isActive = execution.isActive;
-//    this.deleteRoot = execution.deleteRoot;
 
     this.replacedBy = null;
     execution.replacedBy = this;
@@ -772,6 +769,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
       throw new ProcessEngineException("Activity '" + activity + "' with start behavior '" + activityStartBehavior + "'"
         + "cannot be executed by non-scope execution.");
     }
+
     PvmActivity activityImpl = activity;
     switch (activityStartBehavior) {
       case CONCURRENT_IN_FLOW_SCOPE:
@@ -1661,9 +1659,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
   }
 
   public void setDeleteRoot(boolean deleteRoot) {
-//    if (getReplacedBy() != null) {
-//      getReplacedBy().setDeleteRoot(deleteRoot);
-//    }
     this.deleteRoot = deleteRoot;
   }
 

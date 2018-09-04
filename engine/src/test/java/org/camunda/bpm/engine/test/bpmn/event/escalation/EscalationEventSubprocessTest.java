@@ -13,17 +13,14 @@
 
 package org.camunda.bpm.engine.test.bpmn.event.escalation;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
 import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
  * @author Philipp Ossler
