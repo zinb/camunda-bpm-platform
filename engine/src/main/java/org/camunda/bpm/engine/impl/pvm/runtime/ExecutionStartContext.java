@@ -39,13 +39,26 @@ public class ExecutionStartContext {
 
   public void executionStarted(PvmExecutionImpl execution) {
 
-    if (execution instanceof ExecutionEntity && delayFireHistoricVariableEvents) {
-      ExecutionEntity executionEntity = (ExecutionEntity) execution;
-      executionEntity.fireHistoricVariableInstanceCreateEvents();
-    }
+    //  if (execution instanceof ExecutionEntity && delayFireHistoricVariableEvents) {
+    //  ExecutionEntity executionEntity = (ExecutionEntity) execution;
+    //
+    //  ExecutionEntity replacedBy = executionEntity.getProcessInstance().getReplacedBy();
+    //  if (replacedBy != null && replacedBy.equals(execution)) {
+    //    executionEntity.getProcessInstance().fireHistoricVariableInstanceCreateEvents();
+    //  }
+    //  else {
+    //    executionEntity.fireHistoricVariableInstanceCreateEvents();
+    //  }
+    //
+    //}
 
     PvmExecutionImpl parent = execution;
     while (parent != null && parent.getExecutionStartContext() != null) {
+      if (parent instanceof ExecutionEntity && delayFireHistoricVariableEvents) {
+        ExecutionEntity executionEntity = (ExecutionEntity) parent;
+        executionEntity.fireHistoricVariableInstanceCreateEvents();
+      }
+
       parent.disposeExecutionStartContext();
       parent = parent.getParent();
     }
