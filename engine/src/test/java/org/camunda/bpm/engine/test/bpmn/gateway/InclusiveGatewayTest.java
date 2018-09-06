@@ -676,4 +676,15 @@ public class InclusiveGatewayTest extends PluggableProcessEngineTestCase {
     assertEquals(0, runtimeService.createVariableInstanceQuery().count());
   }
 
+  @Deployment
+  public void testEventBasedGateway() {
+    // given
+    runtimeService.startProcessInstanceByKey("Process_1");
+    Task task = taskService.createTaskQuery().singleResult();
+    taskService.complete(task.getId());
+    runtimeService.correlateMessage("foo");
+    task = taskService.createTaskQuery().singleResult();
+    assertEquals("Task_1dztjcp", task.getTaskDefinitionKey());
+    
+  }
 }

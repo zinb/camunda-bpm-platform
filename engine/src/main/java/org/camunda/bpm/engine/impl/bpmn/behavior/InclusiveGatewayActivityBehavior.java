@@ -23,7 +23,9 @@ import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.camunda.bpm.engine.impl.pvm.PvmActivity;
 import org.camunda.bpm.engine.impl.pvm.PvmTransition;
+import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
@@ -143,13 +145,27 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
     visitedActivities.add(srcActivity);
 
     List<PvmTransition> outgoingTransitions = srcActivity.getOutgoingTransitions();
+
     if (outgoingTransitions.isEmpty()) {
+
       ScopeImpl flowScope = srcActivity.getFlowScope();
-      if (flowScope == null || !(flowScope instanceof PvmActivity)) {
-        return false;
+
+      if (flowScope != null && flowScope instanceof PvmActivity) {
+        return isReachable((PvmActivity) flowScope, targetActivity, visitedActivities);
+      }
+      else if (srcActivity.getActivityBehavior() instanceof EventBasedGatewayActivityBehavior) {
+        ActivityImpl eventBasedGateway = (ActivityImpl) srcActivity;
+        Set<ActivityImpl> eventActivities = eventBasedGateway.getEventActivities();
+        for (ActivityImpl eventActivity : eventActivities) {
+          boolean isReachable = isReachable(eventActivity, targetActivity, visitedActivities);
+
+          if (isReachable) {
+            return true;
+          }
+        }
       }
 
-      return isReachable((PvmActivity) flowScope, targetActivity, visitedActivities);
+      return false;
     }
     else {
       for (PvmTransition pvmTransition : outgoingTransitions) {
