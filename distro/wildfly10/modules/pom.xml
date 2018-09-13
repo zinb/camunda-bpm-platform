@@ -7,7 +7,7 @@
     <version>7.10.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-wildfly10-modules</artifactId>
+  <artifactId>camunda-wildfly-modules</artifactId>
   <packaging>jar</packaging>
   <name>camunda BPM - Wildfly Modules</name>
 
@@ -20,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>org.camunda.bpm.wildfly</groupId>
-      <artifactId>camunda-wildfly10-subsystem</artifactId>
+      <artifactId>camunda-wildfly-subsystem</artifactId>
       <version>${project.version}</version>
       <exclusions>
         <exclusion>

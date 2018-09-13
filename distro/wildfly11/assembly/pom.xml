@@ -78,7 +78,7 @@
       <!-- this dependency is to make sure that we are executed after camunda-modules 
         in the reactor -->
       <groupId>org.camunda.bpm.wildfly</groupId>
-      <artifactId>camunda-wildfly10-modules</artifactId>
+      <artifactId>camunda-wildfly-modules</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -101,7 +101,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>org.camunda.bpm.wildfly</groupId>
-                  <artifactId>camunda-wildfly10-modules</artifactId>
+                  <artifactId>camunda-wildfly-modules</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
                   <overWrite>true</overWrite>

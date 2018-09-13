@@ -7,7 +7,7 @@
     <version>7.10.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-wildfly10-subsystem</artifactId>
+  <artifactId>camunda-wildfly-subsystem</artifactId>
   <packaging>jar</packaging>
 
   <name>camunda BPM - Wildfly Subsystem</name>
