@@ -3,14 +3,14 @@
 
   <parent>
     <groupId>org.camunda.bpm.wildfly</groupId>
-    <artifactId>camunda-wildfly10</artifactId>
+    <artifactId>camunda-wildfly14</artifactId>
     <version>7.10.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-wildfly10-assembly</artifactId>
+  <artifactId>camunda-wildfly14-assembly</artifactId>
   <packaging>pom</packaging>
 
-  <name>camunda BPM - Wildfly 10 Assembly</name>
+  <name>camunda BPM - Wildfly 14 Assembly</name>
 
   <description>
     Assembles the camunda BPM platform and makes it ready for qa.
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>org.wildfly</groupId>
       <artifactId>wildfly-dist</artifactId>
-      <version>${version.wildfly10}</version>
+      <version>${version.wildfly14}</version>
       <type>tar.gz</type>
     </dependency>
 
@@ -86,6 +86,33 @@
 
   <build>
     <plugins>
+      <!-- reuse existing wildfly modules dependency -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.camunda.bpm.wildfly</groupId>
+                  <artifactId>camunda-wildfly-modules</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/modules</outputDirectory>
+                  <excludes>**/META-INF/</excludes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
