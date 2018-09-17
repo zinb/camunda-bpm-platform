@@ -3,7 +3,7 @@
 
   <parent>
     <groupId>org.camunda.bpm.wildfly</groupId>
-    <artifactId>camunda-wildfly</artifactId>
+    <artifactId>camunda-wildfly10</artifactId>
     <version>7.10.0-SNAPSHOT</version>
   </parent>
 
