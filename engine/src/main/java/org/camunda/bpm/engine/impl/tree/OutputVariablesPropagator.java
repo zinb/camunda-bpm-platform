@@ -30,6 +30,10 @@ public class OutputVariablesPropagator implements TreeVisitor<ActivityExecution>
   @Override
   public void visit(ActivityExecution execution) {
 
+//    if (execution.isConcurrent()) {
+//      execution = execution.getParent();
+//    }
+//
     if (isProcessInstanceOfSubprocess(execution)) {
 
       PvmExecutionImpl superExecution = (PvmExecutionImpl) execution.getSuperExecution();

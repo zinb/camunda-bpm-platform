@@ -12,6 +12,9 @@
  */
 package org.camunda.bpm.engine.test.bpmn.event.end;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -21,29 +24,29 @@ import org.camunda.bpm.engine.test.Deployment;
  * @author Kristin Polenz
  */
 public class SignalEndEventTest extends PluggableProcessEngineTestCase {
-  
+
   @Deployment
   public void testCatchSignalEndEventInEmbeddedSubprocess() throws Exception {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("catchSignalEndEventInEmbeddedSubprocess");
     assertNotNull(processInstance);
-    
+
     // After process start, usertask in subprocess should exist
     Task task = taskService.createTaskQuery().singleResult();
     assertEquals("subprocessTask", task.getName());
-    
+
     // After task completion, signal end event is reached and caught
     taskService.complete(task.getId());
-    
+
     task = taskService.createTaskQuery().singleResult();
     assertEquals("task after catching the signal", task.getName());
-    
+
     taskService.complete(task.getId());
     assertProcessEnded(processInstance.getId());
   }
-  
+
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/end/SignalEndEventTest.catchSignalEndEvent.bpmn20.xml", 
-      "org/camunda/bpm/engine/test/bpmn/event/end/SignalEndEventTest.processWithSignalEndEvent.bpmn20.xml" 
+      "org/camunda/bpm/engine/test/bpmn/event/end/SignalEndEventTest.catchSignalEndEvent.bpmn20.xml",
+      "org/camunda/bpm/engine/test/bpmn/event/end/SignalEndEventTest.processWithSignalEndEvent.bpmn20.xml"
     })
   public void testCatchSignalEndEventInCallActivity() throws Exception {
     // first, start process to wait of the signal event
@@ -63,11 +66,38 @@ public class SignalEndEventTest extends PluggableProcessEngineTestCase {
     assertEquals(1, taskService.createTaskQuery().count());
     Task task = taskService.createTaskQuery().singleResult();
     assertEquals("taskAfterSignalCatch", task.getTaskDefinitionKey());
-    
+
     // complete user task
     taskService.complete(task.getId());
-    
+
     assertProcessEnded(processInstanceCatchEvent.getId());
   }
 
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEndEventTest.testPropagateOutputVariablesWhileCatchSignalOnCallActivityConcurrentExecution.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEndEventTest.parent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchSignalOnCallActivityConcurrentExecution() {
+    checkOutput("ut2");
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEndEventTest.testPropagateOutputVariablesWhileCatchSignalOnCallActivityNoConcurrentExecution.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEndEventTest.parent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchSignalOnCallActivityNoConcurrentExecution() {
+    checkOutput("inside subprocess");
+  }
+
+  protected void checkOutput(String taskName) {
+    Map<String,Object> variables = new HashMap<String, Object>();
+    variables.put("input", 42);
+    String processInstanceId = runtimeService.startProcessInstanceByKey("SignalParentProcess", variables).getId();
+    // when throw an escalation event on called process
+
+    String id = taskService.createTaskQuery().taskName(taskName).singleResult().getId();
+    taskService.complete(id);
+
+    // the non-interrupting boundary event on call activity should catch the escalation event
+    assertEquals(1, taskService.createTaskQuery().taskName("task after catched signal").count());
+    // and set the output variable of the called process to the process
+    assertNotNull(runtimeService.getVariable(processInstanceId, "cancelReason"));
+    assertEquals(42, runtimeService.getVariable(processInstanceId, "input"));
+  }
 }

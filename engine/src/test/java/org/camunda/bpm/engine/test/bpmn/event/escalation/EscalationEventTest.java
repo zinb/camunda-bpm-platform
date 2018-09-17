@@ -217,6 +217,70 @@ public class EscalationEventTest extends PluggableProcessEngineTestCase {
     assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
   }
 
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecution.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecution() {
+    checkOutput();
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionTwoLevels.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionTwoLevels() {
+    checkOutput();
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionThreeLevels.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionThreeLevels() {
+    checkOutput();
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcess.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcess() {
+    checkOutput();
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcessThreeLevels.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcessThreeLevels() {
+    checkOutput();
+  }
+
+  protected void checkOutput() {
+    Map<String,Object> variables = new HashMap<String, Object>();
+    variables.put("input", 42);
+    String processInstanceId = runtimeService.startProcessInstanceByKey("EscalationParentProcess", variables).getId();
+    // when throw an escalation event on called process
+
+    String id = taskService.createTaskQuery().taskName("ut2").singleResult().getId();
+    taskService.complete(id);
+
+    // the non-interrupting boundary event on call activity should catch the escalation event
+    assertEquals(1, taskService.createTaskQuery().taskName("task after catched escalation").count());
+    // and set the output variable of the called process to the process
+    assertNotNull(runtimeService.getVariable(processInstanceId, "cancelReason"));
+    assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
+  }
+
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityNoConcurrentExecution.bpmn20.xml",
+  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityNoConcurrentExecution() {
+    Map<String,Object> variables = new HashMap<String, Object>();
+    variables.put("input", 42);
+    String processInstanceId = runtimeService.startProcessInstanceByKey("EscalationParentProcess", variables).getId();
+    // when throw an escalation event on called process
+
+    String id = taskService.createTaskQuery().taskName("inside subprocess").singleResult().getId();
+    taskService.complete(id);
+
+    // the non-interrupting boundary event on call activity should catch the escalation event
+    assertEquals(1, taskService.createTaskQuery().taskName("task after catched escalation").count());
+    // and set the output variable of the called process to the process
+    assertNotNull(runtimeService.getVariable(processInstanceId, "cancelReason"));
+    assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
+  }
+
   @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivity.bpmn20.xml"})
   public void testPropagateOutputVariablesTwoTimes() {

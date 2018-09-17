@@ -66,6 +66,9 @@ public class ActivityExecutionHierarchyWalker extends SingleReferenceWalker<Acti
 
   protected static ActivityExecutionTuple createTupel(ActivityExecution execution) {
     PvmScope flowScope = getCurrentFlowScope(execution);
+    if (execution instanceof PvmExecutionImpl) {
+      execution = ((PvmExecutionImpl) execution).getFlowScopeExecution();
+    }
     return new ActivityExecutionTuple(flowScope, execution);
   }
 

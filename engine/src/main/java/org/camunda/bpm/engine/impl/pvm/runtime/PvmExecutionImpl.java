@@ -1457,7 +1457,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements Activity
     return flowScopeExecution.createActivityExecutionMapping(flowScope);
   }
 
-  protected PvmExecutionImpl getFlowScopeExecution() {
+  public PvmExecutionImpl getFlowScopeExecution() {
     if (!isScope || CompensationBehavior.executesNonScopeCompensationHandler(this)) {
       // LEGACY: a correct implementation should also skip a compensation-throwing parent scope execution
       // (since compensation throwing activities are scopes), but this cannot be done for backwards compatibility
