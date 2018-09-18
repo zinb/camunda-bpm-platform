@@ -217,31 +217,31 @@ public class EscalationEventTest extends PluggableProcessEngineTestCase {
     assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecution.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test1.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecution() {
     checkOutput();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionTwoLevels.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test5.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionTwoLevels() {
     checkOutput();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionThreeLevels.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test4.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionThreeLevels() {
     checkOutput();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcess.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test2.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcess() {
     checkOutput();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcessThreeLevels.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test3.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityConcurrentExecutionInSubProcessThreeLevels() {
     checkOutput();
@@ -263,7 +263,7 @@ public class EscalationEventTest extends PluggableProcessEngineTestCase {
     assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivityNoConcurrentExecution.bpmn20.xml",
+  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.test6.bpmn20.xml",
   "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivityNoConcurrentExecution() {
     Map<String,Object> variables = new HashMap<String, Object>();
