@@ -1,3 +1,4 @@
+drop index ACT_IDX_EXECUTION_ROOT_PI;
 drop index ACT_IDX_EXEC_BUSKEY;
 drop index ACT_IDX_TASK_CREATE;
 drop index ACT_IDX_TASK_ASSIGNEE;
@@ -13,6 +14,9 @@ drop index ACT_IDX_AUTH_GROUP_ID;
 
 alter table ACT_GE_BYTEARRAY
     drop foreign key ACT_FK_BYTEARR_DEPL;
+
+alter table ACT_RU_EXECUTION
+    drop foreign key ACT_FK_EXE_ROOT_PROCINST;
 
 alter table ACT_RU_EXECUTION
     drop foreign key ACT_FK_EXE_PROCINST;

@@ -50,3 +50,14 @@ ALTER TABLE ACT_GE_BYTEARRAY
 
 ALTER TABLE ACT_GE_BYTEARRAY
   ADD CREATE_TIME_ datetime2;
+
+-- https://app.camunda.com/jira/browse/CAM-9370
+ALTER TABLE ACT_RU_EXECUTION
+  ADD ROOT_PROC_INST_ID_ nvarchar(64);
+
+create index ACT_IDX_EXEC_ROOT_PI on ACT_RU_EXECUTION(ROOT_PROC_INST_ID_);
+
+alter table ACT_RU_EXECUTION
+    add constraint ACT_FK_EXE_ROOT_PROCINST
+    foreign key (ROOT_PROC_INST_ID_)
+    references ACT_RU_EXECUTION (ID_);

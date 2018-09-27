@@ -48,6 +48,7 @@ create table ACT_RE_DEPLOYMENT (
 create table ACT_RU_EXECUTION (
     ID_ varchar(64),
     REV_ integer,
+    ROOT_PROC_INST_ID_ varchar(64),
     PROC_INST_ID_ varchar(64),
     BUSINESS_KEY_ varchar(255),
     PARENT_ID_ varchar(64),
@@ -332,6 +333,12 @@ alter table ACT_GE_BYTEARRAY
     add constraint ACT_FK_BYTEARR_DEPL
     foreign key (DEPLOYMENT_ID_)
     references ACT_RE_DEPLOYMENT (ID_);
+
+create index ACT_IDX_EXE_ROOT_PI on ACT_RU_EXECUTION(ROOT_PROC_INST_ID_);
+alter table ACT_RU_EXECUTION
+    add constraint ACT_FK_EXE_ROOT_PROCINST
+    foreign key (ROOT_PROC_INST_ID_)
+    references ACT_RU_EXECUTION (ID_);
 
 create index ACT_IDX_EXE_PROCINST on ACT_RU_EXECUTION(PROC_INST_ID_);
 alter table ACT_RU_EXECUTION

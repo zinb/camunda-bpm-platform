@@ -48,6 +48,7 @@ create table ACT_RE_DEPLOYMENT (
 create table ACT_RU_EXECUTION (
     ID_ NVARCHAR2(64),
     REV_ INTEGER,
+    ROOT_PROC_INST_ID_ NVARCHAR2(64),
     PROC_INST_ID_ NVARCHAR2(64),
     BUSINESS_KEY_ NVARCHAR2(255),
     PARENT_ID_ NVARCHAR2(64),
@@ -338,6 +339,12 @@ create index ACT_IDX_EXE_PROCINST on ACT_RU_EXECUTION(PROC_INST_ID_);
 alter table ACT_RU_EXECUTION
     add constraint ACT_FK_EXE_PROCINST
     foreign key (PROC_INST_ID_)
+    references ACT_RU_EXECUTION (ID_);
+
+create index ACT_IDX_EXE_ROOT_PROCINST on ACT_RU_EXECUTION(ROOT_PROC_INST_ID_);
+alter table ACT_RU_EXECUTION
+    add constraint ACT_FK_EXE_ROOT_PROCINST
+    foreign key (ROOT_PROC_INST_ID_)
     references ACT_RU_EXECUTION (ID_);
 
 create index ACT_IDX_EXE_PARENT on ACT_RU_EXECUTION(PARENT_ID_);
