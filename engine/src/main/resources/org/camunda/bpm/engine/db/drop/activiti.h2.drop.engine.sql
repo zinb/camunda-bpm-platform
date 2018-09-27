@@ -1,4 +1,3 @@
-drop index ACT_IDX_EXEC_ROOT_PI;
 drop index ACT_IDX_EXEC_BUSKEY;
 drop index ACT_IDX_TASK_CREATE;
 drop index ACT_IDX_TASK_ASSIGNEE;
@@ -98,6 +97,8 @@ alter table ACT_RU_BATCH
 
 alter table ACT_RU_EXT_TASK
     drop CONSTRAINT ACT_FK_EXT_TASK_ERROR_DETAILS;
+
+drop index ACT_IDX_EXEC_ROOT_PI;
 
 drop index ACT_IDX_EVENT_SUBSCR_CONFIG_;
 drop index ACT_IDX_ATHRZ_PROCEDEF;
